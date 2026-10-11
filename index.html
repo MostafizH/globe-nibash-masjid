@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14532d">
+  <meta name="description" content="Register for Globe Nibash Jaame Masjid Jamat time and announcement updates.">
+  <title>Globe Nibash Jaame Masjid | Updates</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px 14px;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #f0f5ef;
+      color: #173b2b;
+      font-family: Arial, "Noto Sans Bengali", sans-serif;
+    }
+
+    main {
+      width: 100%;
+      max-width: 460px;
+      padding: 28px 22px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px #173b2b12;
+    }
+
+    .top { text-align: center; }
+    .mosque { font-size: 46px; }
+
+    h1 {
+      font-size: 25px;
+      line-height: 1.4;
+      margin: 10px 0;
+    }
+
+    h2 { font-size: 18px; }
+
+    .intro {
+      color: #5b6d60;
+      line-height: 1.8;
+    }
+
+    .lang {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .lang button {
+      width: auto;
+      margin: 0;
+      padding: 9px 14px;
+      background: #e5efe6;
+      color: #14532d;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 7px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd8cd;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+      color: #173b2b;
+    }
+
+    input:focus {
+      outline: 2px solid #168447;
+      outline-offset: 2px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 10px;
+      background: #168447;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #14532d;
+      outline-offset: 3px;
+    }
+
+    .note {
+      color: #68766d;
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    #error {
+      color: #b42318;
+      font-size: 14px;
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+
+<body>
+<main>
+  <div class="lang">
+    <button type="button" id="languageToggle"
+      aria-label="Switch language">বাংলা</button>
+  </div>
+
+  <header class="top">
+    <div class="mosque" aria-hidden="true">🕌</div>
+    <h1 id="heading">Globe Nibash Jaame Masjid</h1>
+    <h2 id="subheading">Jamat Times &amp; Masjid Updates</h2>
+    <p class="intro" id="intro">
+      Assalamu Alaikum wa Rahmatullahi wa Barakatuh.
+      Register to receive the latest Jamat schedules
+      and important masjid announcements.
+    </p>
+  </header>
+
+  <form id="enrollForm">
+    <label for="name" id="nameLabel">Your full name</label>
+    <input id="name" name="name"
+      autocomplete="name" maxlength="100"
+      required placeholder="Enter your full name">
+
+    <label for="phone" id="phoneLabel">
+      Your WhatsApp number
+    </label>
+    <input id="phone" name="phone" type="tel"
+      autocomplete="tel" maxlength="25"
+      required placeholder="+8801XXXXXXXXX"
+      aria-describedby="phoneHelp">
+
+    <p class="note" id="phoneHelp">
+      Include your country code, for example +880.
+    </p>
+
+    <p id="error" role="alert"></p>
+
+    <button type="submit" id="submitButton">
+      Send Enrollment Request
+    </button>
+  </form>
+
+  <p class="note" id="privacyNote">
+    Your details are placed in a WhatsApp message to
+    the mosque administrator. This page does not store
+    your registration. Review the message and tap Send.
+  </p>
+</main>
+
+<script>
+  // Mosque administrator's WhatsApp number:
+  // international format, digits only.
+  const ADMIN_WHATSAPP = "8801309036846";
+
+  const copy = {
+    en: {
+      lang: "বাংলা",
+      heading: "Globe Nibash Jaame Masjid",
+      subheading: "Jamat Times & Masjid Updates",
+      intro: "Assalamu Alaikum wa Rahmatullahi wa Barakatuh. Register to receive the latest Jamat schedules and important masjid announcements.",
+      nameLabel: "Your full name",
+      namePlaceholder: "Enter your full name",
+      phoneLabel: "Your WhatsApp number",
+      phonePlaceholder: "+8801XXXXXXXXX",
+      phoneHelp: "Include your country code, for example +880.",
+      submit: "Send Enrollment Request",
+      privacy: "Your details are placed in a WhatsApp message to the mosque administrator. This page does not store your registration. Review the message and tap Send.",
+      required: "Please enter your name and WhatsApp number.",
+      invalid: "Please enter a valid phone number with country code.",
+      message: name => `Salam Aleikum,
+
+My name is ${name.name} and my WhatsApp number is ${name.phone}.
+
+I would like to enroll myself into the "Globe Nibash Jaame Masjid Updates Group".
+
+Kindly keep me updated with the latest schedule for Jamat times.
+
+JazakAllahu Khairan.`
+    },
+    bn: {
+      lang: "English",
+      heading: "গ্লোব নিবাস জামে মসজিদ",
+      subheading: "জামাতের সময়সূচি ও মসজিদের আপডেট",
+      intro: "আসসালামু আলাইকুম ওয়া রহমাতুল্লাহি ওয়া বারাকাতুহু। জামাতের সর্বশেষ সময়সূচি ও মসজিদের গুরুত্বপূর্ণ ঘোষণা পেতে নিবন্ধন করুন।",
+      nameLabel: "আপনার পূর্ণ নাম",
+      namePlaceholder: "আপনার পূর্ণ নাম লিখুন",
+      phoneLabel: "আপনার WhatsApp নম্বর",
+      phonePlaceholder: "+8801XXXXXXXXX",
+      phoneHelp: "দেশের কোডসহ নম্বর দিন, যেমন +880।",
+      submit: "নিবন্ধনের অনুরোধ পাঠান",
+      privacy: "আপনার তথ্য মসজিদের প্রশাসকের কাছে WhatsApp বার্তায় পাঠানো হবে। এই পেজে আপনার নিবন্ধনের তথ্য সংরক্ষণ করা হয় না। বার্তাটি দেখে Send চাপুন।",
+      required: "অনুগ্রহ করে আপনার নাম ও WhatsApp নম্বর লিখুন।",
+      invalid: "দেশের কোডসহ একটি সঠিক ফোন নম্বর লিখুন।",
+      message: data => `আসসালামু আলাইকুম,
+
+আমার নাম ${data.name} এবং আমার WhatsApp নম্বর ${data.phone}।
+
+আমি "Globe Nibash Jaame Masjid Updates Group"-এ যুক্ত হতে চাই।
+
+অনুগ্রহ করে জামাতের সর্বশেষ সময়সূচি আমাকে জানাবেন।
+
+জাযাকাল্লাহু খাইরান।`
+    }
+  };
+
+  let currentLanguage = "en";
+
+  const el = id => document.getElementById(id);
+
+  function setLanguage(language) {
+    currentLanguage = language;
+    const t = copy[language];
+
+    document.documentElement.lang =
+      language === "bn" ? "bn" : "en";
+
+    el("languageToggle").textContent = t.lang;
+    el("heading").textContent = t.heading;
+    el("subheading").textContent = t.subheading;
+    el("intro").textContent = t.intro;
+    el("nameLabel").textContent = t.nameLabel;
+    el("name").placeholder = t.namePlaceholder;
+    el("phoneLabel").textContent = t.phoneLabel;
+    el("phone").placeholder = t.phonePlaceholder;
+    el("phoneHelp").textContent = t.phoneHelp;
+    el("submitButton").textContent = t.submit;
+    el("privacyNote").textContent = t.privacy;
+    el("error").textContent = "";
+  }
+
+  el("languageToggle").addEventListener("click", () => {
+    setLanguage(currentLanguage === "en" ? "bn" : "en");
+  });
+
+  el("enrollForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const t = copy[currentLanguage];
+    const name = el("name").value.trim();
+    const rawPhone = el("phone").value.trim();
+    const phone = rawPhone.replace(/[\s().-]/g, "");
+
+    if (!name || !rawPhone) {
+      el("error").textContent = t.required;
+      return;
+    }
+
+    // Accept a leading +, followed by 7–15 digits.
+    if (!/^\+?\d{7,15}$/.test(phone)) {
+      el("error").textContent = t.invalid;
+      return;
+    }
+
+    const normalizedPhone =
+      phone.startsWith("+") ? phone : "+" + phone;
+
+    const message = t.message({
+      name: name,
+      phone: normalizedPhone
+    });
+
+    const whatsappUrl =
+      "https://wa.me/" + ADMIN_WHATSAPP +
+      "?text=" + encodeURIComponent(message);
+
+    // User action opens WhatsApp; the visitor must send.
+    window.location.href = whatsappUrl;
+  });
+
+  setLanguage("en");
+</script>
+</body>
+</html>
